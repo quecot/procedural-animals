@@ -1,0 +1,6 @@
+.cache/
+build/
+
+raylib-5.0_macos/
+
+.DS_Store
