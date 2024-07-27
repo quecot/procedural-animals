@@ -111,8 +111,10 @@ int main(void) {
           if (i == BODY_PARTS - 1) {
             for (size_t j = 0; j < TAIL_DOT_COUNT; j++) {
               float angle_offset = PI / 2 + (PI / (TAIL_DOT_COUNT - 1)) * j;
-              tail_dots[j]       = (Vector2){body_positions[i].x + cos(angle - angle_offset) * 15,
-                                             body_positions[i].y + sin(angle - angle_offset) * 15};
+              tail_dots[j]       = (Vector2){
+                  body_positions[i].x + cos(angle - angle_offset) * body_radii[i],
+                  body_positions[i].y + sin(angle - angle_offset) * body_radii[i],
+              };
             }
           }
         }
