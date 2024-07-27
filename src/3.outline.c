@@ -1,6 +1,5 @@
 #include <math.h>
 #include <raylib.h>
-#include "rlgl.h"
 #include <sys/_types/_size_t.h>
 
 //------------------------------------------------------------------------------------------
@@ -22,7 +21,7 @@ int main(void) {
   const float LINE_WIDTH = 3.0;
 
   // Head
-  const float HEAD_RADIUS   = 68 / 2;
+  const float HEAD_RADIUS   = 37;
   Vector2 head_position     = {-150.0, -150.0};
   const float HEAD_VELOCITY = 5.0;
   bool head_stopped         = false;
@@ -37,11 +36,7 @@ int main(void) {
   Vector2 body_positions[BODY_PARTS];
   Vector2 left_body_dots[BODY_PARTS];
   Vector2 right_body_dots[BODY_PARTS];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wgnu-folding-constant"
-  float body_radii[BODY_PARTS] = {84 / 2, 87 / 2, 85 / 2, 83 / 2, 77 / 2, 64 / 2, 60 / 2,
-                                  51 / 2, 38 / 2, 34 / 2, 32 / 2, 19 / 2, 15};
-#pragma clang diagnostic pop
+  float body_radii[] = {42, 43.5, 42.5, 41.5, 38.5, 32, 30, 25.5, 18, 17, 16, 9.5, 15};
 
   const int TAIL_DOT_COUNT = 8;
   Vector2 tail_dots[TAIL_DOT_COUNT];
@@ -134,13 +129,6 @@ int main(void) {
 
     // Draw body parts
     for (size_t i = 0; i < BODY_PARTS; i++) {
-      // DrawLineEx((i == 0) ? head_position : body_positions[i - 1], body_positions[i],
-      // body_radii[i],
-      //  LIGHTGRAY);
-      // DrawCircleV(body_positions[i], body_radii[i], LIGHTGRAY);
-
-      // DrawCircleV(left_body_dots[i], 3, BLACK);
-      // DrawCircleV(right_body_dots[i], 3, BLACK);
       // Join the dots between body parts
       if (i > 0) {
         DrawLineEx(left_body_dots[i - 1], left_body_dots[i], LINE_WIDTH, BLACK);
@@ -150,15 +138,9 @@ int main(void) {
         DrawLineEx(head_dots[0], right_body_dots[0], LINE_WIDTH, BLACK);
       }
     }
-    // for (size_t i = 0; i < BODY_PARTS; i++) {
-    // DrawCircleV(body_positions[i], body_radii[i] - 6, WHITE);
-    // }
 
     // Draw head
-    // DrawCircleV(head_position, HEAD_RADIUS, DARKGRAY);
-    // DrawCircleV(head_position, HEAD_RADIUS - 6, WHITE);
     for (size_t i = 0; i < HEAD_DOT_COUNT - 1; i++) {
-      // DrawCircleV(head_dots[i], 3, BLACK);
       DrawLineEx(head_dots[i], head_dots[i + 1], LINE_WIDTH, BLACK);
     }
 
@@ -179,11 +161,8 @@ int main(void) {
     //----------------------------------------------------------------------------------
   }
 
-  // De-Initialization
+  // De-Initialization: unload all loaded data (textures, fonts, audio)
   //--------------------------------------------------------------------------------------
-
-  // TODO: Unload all loaded data (textures, fonts, audio) here!
-
   CloseWindow();
   //--------------------------------------------------------------------------------------
 

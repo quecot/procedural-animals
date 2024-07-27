@@ -115,11 +115,8 @@ int main(void) {
     //----------------------------------------------------------------------------------
   }
 
-  // De-Initialization
+  // De-Initialization: unload all loaded data (textures, fonts, audio)
   //--------------------------------------------------------------------------------------
-
-  // TODO: Unload all loaded data (textures, fonts, audio) here!
-
   CloseWindow();
   //--------------------------------------------------------------------------------------
 
