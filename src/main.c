@@ -87,69 +87,71 @@ int main(void) {
                                        head_position.y + sin(angle + PI / 4) * (HEAD_RADIUS - 12)};
         right_eye_position = (Vector2){head_position.x + cos(angle - PI / 4) * (HEAD_RADIUS - 12),
                                        head_position.y + sin(angle - PI / 4) * (HEAD_RADIUS - 12)};
+
+        // Update body parts applying a max distance constraint between them
+        for (size_t i = 0; i < BODY_PARTS; i++) {
+          Vector2 target_position = (i == 0) ? head_position : body_positions[i - 1];
+
+          distance = sqrt(pow(target_position.x - body_positions[i].x, 2) +
+                          pow(target_position.y - body_positions[i].y, 2));
+
+          if (distance > BODY_DISTANCE) {
+            float angle          = atan2(target_position.y - body_positions[i].y,
+                                         target_position.x - body_positions[i].x);
+            body_positions[i].x += cos(angle) * (distance - BODY_DISTANCE);
+            body_positions[i].y += sin(angle) * (distance - BODY_DISTANCE);
+
+            left_body_dots[i] =
+                (Vector2){body_positions[i].x + cos(angle + PI / 2) * body_radii[i],
+                          body_positions[i].y + sin(angle + PI / 2) * body_radii[i]};
+            right_body_dots[i] =
+                (Vector2){body_positions[i].x + cos(angle - PI / 2) * body_radii[i],
+                          body_positions[i].y + sin(angle - PI / 2) * body_radii[i]};
+
+            if (i == BODY_PARTS - 1) {
+              for (size_t j = 0; j < TAIL_DOT_COUNT; j++) {
+                float angle_offset = PI / 2 + (PI / (TAIL_DOT_COUNT - 1)) * j;
+                tail_dots[j]       = (Vector2){body_positions[i].x + cos(angle - angle_offset) * 15,
+                                               body_positions[i].y + sin(angle - angle_offset) * 15};
+              }
+            }
+          }
+
+          // Angular constraint
+          Vector2 prev_segment    = (i == 0)   ? (Vector2){mouse_x, mouse_y}
+                                    : (i == 1) ? head_position
+                                               : body_positions[i - 2];
+          Vector2 current_segment = (i == 0) ? head_position : body_positions[i - 1];
+          Vector2 next_segment    = body_positions[i];
+
+          float angle1 =
+              atan2(current_segment.y - prev_segment.y, current_segment.x - prev_segment.x);
+          float angle2 =
+              atan2(next_segment.y - current_segment.y, next_segment.x - current_segment.x);
+
+          float angle_diff = angle2 - angle1;
+
+          if (angle_diff > PI)
+            angle_diff -= 2 * PI;
+          if (angle_diff < -PI)
+            angle_diff += 2 * PI;
+
+          if (fabs(angle_diff) > MAX_ANGLE_DIFFERENCE) {
+            float correction_angle =
+                (angle_diff > 0) ? angle1 + MAX_ANGLE_DIFFERENCE : angle1 - MAX_ANGLE_DIFFERENCE;
+            float correction_distance = sqrt(pow(next_segment.x - current_segment.x, 2) +
+                                             pow(next_segment.y - current_segment.y, 2));
+
+            body_positions[i].x = current_segment.x + cos(correction_angle) * correction_distance;
+            body_positions[i].y = current_segment.y + sin(correction_angle) * correction_distance;
+          }
+        }
       } else if (!head_stopped) {
         head_stopped = true;
       }
 
       if (head_stopped && distance > (HEAD_VELOCITY + HEAD_RADIUS)) {
         head_stopped = false;
-      }
-
-      // Update body parts applying a max distance constraint between them
-      for (size_t i = 0; i < BODY_PARTS; i++) {
-        Vector2 target_position = (i == 0) ? head_position : body_positions[i - 1];
-
-        distance = sqrt(pow(target_position.x - body_positions[i].x, 2) +
-                        pow(target_position.y - body_positions[i].y, 2));
-
-        if (distance > BODY_DISTANCE) {
-          float angle          = atan2(target_position.y - body_positions[i].y,
-                                       target_position.x - body_positions[i].x);
-          body_positions[i].x += cos(angle) * (distance - BODY_DISTANCE);
-          body_positions[i].y += sin(angle) * (distance - BODY_DISTANCE);
-
-          left_body_dots[i]  = (Vector2){body_positions[i].x + cos(angle + PI / 2) * body_radii[i],
-                                         body_positions[i].y + sin(angle + PI / 2) * body_radii[i]};
-          right_body_dots[i] = (Vector2){body_positions[i].x + cos(angle - PI / 2) * body_radii[i],
-                                         body_positions[i].y + sin(angle - PI / 2) * body_radii[i]};
-
-          if (i == BODY_PARTS - 1) {
-            for (size_t j = 0; j < TAIL_DOT_COUNT; j++) {
-              float angle_offset = PI / 2 + (PI / (TAIL_DOT_COUNT - 1)) * j;
-              tail_dots[j]       = (Vector2){body_positions[i].x + cos(angle - angle_offset) * 15,
-                                             body_positions[i].y + sin(angle - angle_offset) * 15};
-            }
-          }
-        }
-
-        // Angular constraint
-        Vector2 prev_segment    = (i == 0)   ? (Vector2){mouse_x, mouse_y}
-                                  : (i == 1) ? head_position
-                                             : body_positions[i - 2];
-        Vector2 current_segment = (i == 0) ? head_position : body_positions[i - 1];
-        Vector2 next_segment    = body_positions[i];
-
-        float angle1 =
-            atan2(current_segment.y - prev_segment.y, current_segment.x - prev_segment.x);
-        float angle2 =
-            atan2(next_segment.y - current_segment.y, next_segment.x - current_segment.x);
-
-        float angle_diff = angle2 - angle1;
-
-        if (angle_diff > PI)
-          angle_diff -= 2 * PI;
-        if (angle_diff < -PI)
-          angle_diff += 2 * PI;
-
-        if (fabs(angle_diff) > MAX_ANGLE_DIFFERENCE) {
-          float correction_angle =
-              (angle_diff > 0) ? angle1 + MAX_ANGLE_DIFFERENCE : angle1 - MAX_ANGLE_DIFFERENCE;
-          float correction_distance = sqrt(pow(next_segment.x - current_segment.x, 2) +
-                                           pow(next_segment.y - current_segment.y, 2));
-
-          body_positions[i].x = current_segment.x + cos(correction_angle) * correction_distance;
-          body_positions[i].y = current_segment.y + sin(correction_angle) * correction_distance;
-        }
       }
     }
 
