@@ -44,7 +44,7 @@ int main(void) {
   const int TAIL_DOT_COUNT = 8;
   Vector2 tail_dots[TAIL_DOT_COUNT];
 
-  const float MAX_ANGLE_DIFFERENCE = PI / 6;
+  const float MAX_ANGLE_DIFFERENCE = PI / 8;
 
   for (int i = 0; i < BODY_PARTS; i++) {
     body_positions[i] = (Vector2){-150.0, -150.0};
