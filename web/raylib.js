@@ -82,10 +82,14 @@ class RaylibJs {
         const mouseMove = (e) => {
             this.currentMousePosition = {x: e.clientX, y: e.clientY};
         };
+        const touchMove = (e) => {
+            this.currentMousePosition = {x: e.touches[0].clientX, y: e.touches[0].clientY};
+        }
         window.addEventListener("keydown", keyDown);
         window.addEventListener("keyup", keyUp);
         window.addEventListener("wheel", wheelMove);
         window.addEventListener("mousemove", mouseMove);
+        window.addEventListener("touchmove", touchMove);
 
         this.wasm.instance.exports.main();
         const next = (timestamp) => {
