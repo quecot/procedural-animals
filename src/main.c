@@ -167,7 +167,7 @@ int main(void) {
     ClearBackground(BACKGROUND_COLOR);
 
     // Draw body parts with fill and stroke
-    for (size_t i = BODY_PARTS - 1; i >= 0; i--) {
+    for (int i = BODY_PARTS - 1; i >= 0; i--) {
       // Ensure we are not accessing out of bounds for body parts
       if (i > 0) {
         // Draw filled triangles for body parts
