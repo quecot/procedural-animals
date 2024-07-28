@@ -2,5 +2,6 @@
 build/
 
 raylib-5.0_macos/
+videos/
 
 .DS_Store
