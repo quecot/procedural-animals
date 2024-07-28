@@ -56,6 +56,17 @@
             font-family: grixel;
             src: url(fonts/acme_7_wide_xtnd.woff);
         }
+
+        #footer {
+            position: absolute;
+            width: calc(100% - 2rem);
+            bottom: 0;
+            left: 0;
+            padding: 1rem;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
     <script src="raylib.js"></script>
 </head>
@@ -65,6 +76,16 @@
         <!-- This is populated by js -->
         </select>
     <canvas id="game"></canvas>
+    <footer id="footer">
+        <a href="https://github.com/quecot/procedural-animals" target="_blank">Source code</a>
+
+        <span>
+            Credits: 
+            <a href="https://www.youtube.com/watch?v=qlfh_rv6khY" target="_blank">argonaut</a>,
+            <a href="https://github.com/raysan5/raylib" target="_blank">Raylib</a>,
+            <a href="https://github.com/tsoding/zozlib.js" target="_blank">zozlib.js</a>
+        </span>
+    </footer>
     <script>
         const wasmPaths = {
             "community": ["procedural_snake"],
