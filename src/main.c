@@ -29,18 +29,23 @@ int main(void) {
   Vector2 head_position     = {-150.0, -150.0};
   const float HEAD_VELOCITY = 5.0;
   bool head_stopped         = false;
-  const int HEAD_DOT_COUNT  = 12;
+  const int HEAD_DOT_COUNT  = 18;
   Vector2 head_dots[HEAD_DOT_COUNT];
   Vector2 left_eye_position  = {0, 0};
   Vector2 right_eye_position = {0, 0};
 
   // Body parts
-  const float BODY_DISTANCE = 30;
-  const int BODY_PARTS      = 13;
+  const float BODY_DISTANCE = 2;
+  const int BODY_PARTS      = 300;
   Vector2 body_positions[BODY_PARTS];
   Vector2 left_body_dots[BODY_PARTS];
   Vector2 right_body_dots[BODY_PARTS];
-  float body_radii[] = {42, 43.5, 42.5, 41.5, 38.5, 32, 30, 25.5, 18, 17, 16, 9.5, 15};
+  float body_radii[BODY_PARTS];
+
+  for (int i = 0; i < BODY_PARTS; i++) {
+    body_positions[i] = (Vector2){-150.0, -150.0};
+    body_radii[i]     = HEAD_RADIUS - (HEAD_RADIUS - 5) * (i / (float)BODY_PARTS);
+  }
 
   const int TAIL_DOT_COUNT = 8;
   Vector2 tail_dots[TAIL_DOT_COUNT];
