@@ -1,134 +1,118 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Hello, Raylib!</title>
     <style>
+      :root {
+        --color-dark: #181818;
+        --color-lite: #e7e7e7;
+      }
 
-        :root {
-            --color-dark: #181818;
-            --color-lite: #e7e7e7;
+      body {
+        /* Lite Mode */
+        background: var(--color-lite);
+        color: var(--color-dark);
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+          background: var(--color-dark);
+          color: var(--color-lite);
         }
+      }
 
-        body {
-            /* Lite Mode */
-            background: var(--color-lite);
-            color: var(--color-dark);
+      #game {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid var(--color-dark);
 
-            /* Dark Mode */
-            @media (prefers-color-scheme: dark) {
-                background: var(--color-dark);
-                color: var(--color-lite);
-            }
+        @media (prefers-color-scheme: dark) {
+          border: 1px solid var(--color-lite);
         }
+      }
 
-        #game {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 1px solid var(--color-dark);
+      #raylib-example-select {
+        display: block;
+        max-width: 8rem;
+      }
 
-            @media (prefers-color-scheme: dark) {
-               border: 1px solid var(--color-lite);
-            }
+      .not-hosted-msg {
+        text-align: center;
+        position: absolute;
 
-        }
+        top: 50%;
+        left: 50%;
 
-        #raylib-example-select {
-            display: block;
-            max-width: 8rem;
-        }
+        transform: translate(-50%, -50%);
+      }
 
-        .not-hosted-msg {
-            text-align: center;
-            position: absolute;
+      .not-hosted-msg .important {
+        font-weight: bold;
+      }
+      @font-face {
+        font-family: grixel;
+        src: url(fonts/acme_7_wide_xtnd.woff);
+      }
 
-            top: 50%;
-            left: 50%;
-
-            transform: translate(-50%, -50%);
-        }
-
-        .not-hosted-msg .important {
-            font-weight: bold;
-        }
-        @font-face {
-            font-family: grixel;
-            src: url(fonts/acme_7_wide_xtnd.woff);
-        }
-
-        #footer {
-            position: absolute;
-            width: calc(100% - 2rem);
-            bottom: 0;
-            left: 0;
-            padding: 1rem;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-        }
+      #footer {
+        position: absolute;
+        width: calc(100% - 2rem);
+        bottom: 0;
+        left: 0;
+        padding: 1rem;
+        text-align: center;
+        display: flex;
+        justify-content: space-between;
+      }
     </style>
     <script src="raylib.js"></script>
-</head>
-<body>
-    <label for="raylib-example-select">Choose an Example:</label>
-        <select id="raylib-example-select" onchange="startRaylib(this.value)">
-        <!-- This is populated by js -->
-        </select>
+  </head>
+  <body>
     <canvas id="game"></canvas>
     <footer id="footer">
-        <a href="https://github.com/quecot/procedural-animals" target="_blank">Source code</a>
+      <a href="https://github.com/quecot/procedural-animals" target="_blank"
+        >Source code</a
+      >
 
-        <span>
-            Credits: 
-            <a href="https://www.youtube.com/watch?v=qlfh_rv6khY" target="_blank">argonaut</a>,
-            <a href="https://github.com/raysan5/raylib" target="_blank">Raylib</a>,
-            <a href="https://github.com/tsoding/zozlib.js" target="_blank">zozlib.js</a>
-        </span>
+      <span>
+        Credits:
+        <a href="https://www.youtube.com/watch?v=qlfh_rv6khY" target="_blank"
+          >argonaut</a
+        >,
+        <a href="https://github.com/raysan5/raylib" target="_blank">Raylib</a>,
+        <a href="https://github.com/tsoding/zozlib.js" target="_blank"
+          >zozlib.js</a
+        >
+      </span>
     </footer>
     <script>
-        const wasmPaths = {
-            "community": ["procedural_snake"],
-            "tsoding": ["tsoding_ball", "tsoding_snake",],
-            "core": ["core_basic_window", "core_basic_screen_manager", "core_input_keys", "core_input_mouse_wheel",],
-            "shapes": ["shapes_colors_palette"],
-            "text": ["text_writing_anim"],
-            "textures": ["textures_logo_raylib"],
-        }
-        const defaultWasm = Object.values(wasmPaths)[0][0];
+      const wasmPaths = {
+        queco: ["procedural_snake"],
+      };
+      const defaultWasm = Object.values(wasmPaths)[0][0];
 
-        const raylibExampleSelect = document.getElementById("raylib-example-select");
+      const { protocol } = window.location;
+      const isHosted = protocol !== "file:";
+      let raylibJs = undefined;
 
-        for (const exampleCategory in wasmPaths){
-            raylibExampleSelect.innerHTML += `<optgroup label="${exampleCategory}">`
-            for (const example of wasmPaths[exampleCategory]){
-                raylibExampleSelect.innerHTML += `<option>${example}</option>`
-            }
-            raylibExampleSelect.innerHTML += "</optgroup>"
-        }
+      function startRaylib(selectedWasm) {
+        var queryParams = new URLSearchParams(window.location.search);
+        queryParams.set("example", selectedWasm);
+        history.pushState(null, null, "?" + queryParams.toString());
 
-        const { protocol } = window.location;
-        const isHosted = protocol !== "file:";
-        let raylibJs = undefined;
-
-        function startRaylib(selectedWasm){
-            var queryParams = new URLSearchParams(window.location.search);
-            queryParams.set("example", selectedWasm);
-            history.pushState(null, null, "?"+queryParams.toString());
-            raylibExampleSelect.value = selectedWasm;
-
-            if (isHosted) {
-                if (raylibJs !== undefined) {
-                    raylibJs.stop();
-                }
-                raylibJs = new RaylibJs();
-                raylibJs.start({
-                    wasmPath: `wasm/${selectedWasm}.wasm`,
-                    canvasId: "game",
-                });
-            } else {
-                window.addEventListener("load", () => {
-                    document.body.innerHTML = `
+        if (isHosted) {
+          if (raylibJs !== undefined) {
+            raylibJs.stop();
+          }
+          raylibJs = new RaylibJs();
+          raylibJs.start({
+            wasmPath: `wasm/${selectedWasm}.wasm`,
+            canvasId: "game",
+          });
+        } else {
+          window.addEventListener("load", () => {
+            document.body.innerHTML = `
                         <div class="not-hosted-msg">
                             <div class="important">
                                 <p>Unfortunately, due to CORs restrictions, the wasm assembly cannot be fetched.</p>
@@ -138,15 +122,16 @@
                             <code>$ python3 -m http.server 6969</code>
                         </div>
                         `;
-                });
-            }
+          });
         }
+      }
 
-        let queryParams = new URLSearchParams(window.location.search);
-        const exampleParam = queryParams.get("example") ?? defaultWasm;
+      let queryParams = new URLSearchParams(window.location.search);
+      const exampleParam = queryParams.get("example") ?? defaultWasm;
 
-        if (Object.values(wasmPaths).flat().includes(exampleParam)) startRaylib(exampleParam);
-        else startRaylib(defaultWasm);
+      if (Object.values(wasmPaths).flat().includes(exampleParam))
+        startRaylib(exampleParam);
+      else startRaylib(defaultWasm);
     </script>
-</body>
+  </body>
 </html>

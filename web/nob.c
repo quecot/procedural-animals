@@ -9,46 +9,6 @@ typedef struct {
 
 Example examples[] = {
     {
-        .src_path   = "./examples/core_basic_window.c",
-        .bin_path   = "./build/core_basic_window",
-        .wasm_path  = "./wasm/core_basic_window.wasm",
-    },
-    {
-        .src_path   = "./examples/core_basic_screen_manager.c",
-        .bin_path   = "./build/core_basic_screen_manager",
-        .wasm_path  = "./wasm/core_basic_screen_manager.wasm",
-    },
-    {
-        .src_path   = "./examples/core_input_keys.c",
-        .bin_path   = "./build/core_input_keys",
-        .wasm_path  = "./wasm/core_input_keys.wasm",
-    },
-    {
-        .src_path   = "./examples/shapes_colors_palette.c",
-        .bin_path   = "./build/shapes_colors_palette",
-        .wasm_path  = "./wasm/shapes_colors_palette.wasm",
-    },
-    {
-        .src_path   = "./examples/tsoding_ball.c",
-        .bin_path = "./build/tsoding_ball",
-        .wasm_path  = "./wasm/tsoding_ball.wasm",
-    },
-    {
-        .src_path   = "./examples/tsoding_snake/tsoding_snake.c",
-        .bin_path = "./build/tsoding_snake",
-        .wasm_path  = "./wasm/tsoding_snake.wasm",
-    },
-    {
-        .src_path   = "./examples/core_input_mouse_wheel.c",
-        .bin_path   = "./build/core_input_mouse_wheel",
-        .wasm_path  = "./wasm/core_input_mouse_wheel.wasm",
-    },
-    {
-        .src_path   = "./examples/text_writing_anim.c",
-        .bin_path   = "./build/text_writing_anim",
-        .wasm_path  = "./wasm/text_writing_anim.wasm",
-    },
-    {
         .src_path   = "./examples/procedural_snake.c",
         .bin_path   = "./build/procedural_snake",
         .wasm_path  = "./wasm/procedural_snake.wasm",
