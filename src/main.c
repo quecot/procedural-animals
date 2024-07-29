@@ -52,10 +52,6 @@ int main(void) {
 
   const float MAX_ANGLE_DIFFERENCE = PI / 8;
 
-  for (int i = 0; i < BODY_PARTS; i++) {
-    body_positions[i] = (Vector2){-150.0, -150.0};
-  }
-
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Procedural Animals");
 
   SetTargetFPS(60);
