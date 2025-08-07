@@ -13,7 +13,7 @@ int main(void) {
   // Initialization (variables and assets)
   //--------------------------------------------------------------------------------------
   const int SCREEN_WIDTH       = 800;
-  const int SCREEN_HEIGHT      = 450;
+  const int SCREEN_HEIGHT      = 600;
   const Color BACKGROUND_COLOR = {255, 255, 255, 255};
   const Color FILL_COLOR       = {103, 212, 219, 255};
 
@@ -27,7 +27,7 @@ int main(void) {
   // Head
   const float HEAD_RADIUS   = 37;
   Vector2 head_position     = {-150.0, -150.0};
-  const float HEAD_VELOCITY = 5.0;
+  const float HEAD_VELOCITY = 4.5;
   bool head_stopped         = false;
   const int HEAD_DOT_COUNT  = 18;
   Vector2 head_dots[HEAD_DOT_COUNT];
@@ -168,7 +168,7 @@ int main(void) {
     ClearBackground(BACKGROUND_COLOR);
 
     // Draw body parts with fill and stroke
-    for (int i = BODY_PARTS - 1; i >= 0; i--) {
+    for (size_t i = BODY_PARTS - 1; i < BODY_PARTS; i--) {
       // Ensure we are not accessing out of bounds for body parts
       if (i > 0) {
         // Draw filled triangles for body parts
