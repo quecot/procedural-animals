@@ -65,6 +65,12 @@
         display: flex;
         justify-content: space-between;
       }
+
+      a {
+        @media (prefers-color-scheme: dark) {
+          color: var(--color-lite);
+        }
+      }
     </style>
     <script src="raylib.js"></script>
   </head>
